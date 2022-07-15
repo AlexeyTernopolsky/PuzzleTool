@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Тулзина</string>
+    <string name="action.start">Запуск</string>
+    <string name="action.testAnalyze">Тестовый анализ</string>
+</resources>
