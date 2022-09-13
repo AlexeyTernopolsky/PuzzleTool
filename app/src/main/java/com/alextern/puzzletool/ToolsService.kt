@@ -67,10 +67,15 @@ class ToolsService : Service() {
     }
 
     private fun analyzeBitmap(bitmap: Bitmap) {
-        val converter = BitmapToPuzzleConverter(bitmap, ConverterType.kNormal)
+        val converter = BitmapToPuzzleConverter(bitmap, ConverterType.kPuzzleDuel)
         val puzzle = converter.analyze()
         if (puzzle.isValid()) {
             controls?.status = "Анализировано"
+            val optimizer = PuzzleOptimizer(puzzle)
+            optimizer.optimize()
+            val pos = converter.cellCoordinate(optimizer.actionX, optimizer.actionY)
+            controls?.status = "Оптимально:\n${optimizer.actionX} x ${optimizer.actionY}"
+            controls?.showPuzzleAction(pos, optimizer.actionType)
         } else {
             print(puzzle.toString())
             controls?.status = "Новое сохранение"
@@ -165,6 +170,16 @@ class ToolsService : Service() {
                 showInterface()
                 startProjection(projCode, projData)
             }
+            isTestControlsCommand(intent) -> {
+                // create notification
+                val notification = getNotification(this)
+                startForeground(notification.first, notification.second)
+                // show interface
+                showInterface()
+                mHandler?.postDelayed({
+                    controls?.showPuzzleAction(Pair(20, 400), Action.moveRigh)
+                }, 1000)
+            }
             else -> {
                 stopSelf()
             }
@@ -240,6 +255,7 @@ class ToolsService : Service() {
         private const val DATA = "DATA"
         private const val ACTION = "ACTION"
         private const val START = "START"
+        private const val TEST_CONTROLS = "TEST_CONTROLS"
         private const val SCREENCAP_NAME = "screencap"
         fun getStartIntent(context: Context?, resultCode: Int, data: Intent?): Intent {
             val intent = Intent(context, ToolsService::class.java)
@@ -249,10 +265,18 @@ class ToolsService : Service() {
             return intent
         }
 
+        fun getTestControlIntent(context: Context?): Intent {
+            val intent = Intent(context, ToolsService::class.java)
+            intent.putExtra(ACTION, TEST_CONTROLS)
+            return intent
+        }
+
         private fun isStartCommand(intent: Intent): Boolean {
             return (intent.hasExtra(RESULT_CODE) && intent.hasExtra(DATA)
                     && intent.hasExtra(ACTION) && intent.getStringExtra(ACTION) == START)
         }
+
+        private fun isTestControlsCommand(intent: Intent) = intent.getStringExtra(ACTION) == TEST_CONTROLS
 
         private val virtualDisplayFlags: Int
             get() = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY or DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC

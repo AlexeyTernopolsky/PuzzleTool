@@ -1,9 +1,15 @@
 package com.alextern.puzzletool
 
 import android.graphics.PixelFormat
+import android.opengl.Visibility
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.*
+import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
+import kotlinx.coroutines.*
 
 
 class Controls(private val service: ToolsService) {
@@ -12,40 +18,77 @@ class Controls(private val service: ToolsService) {
     private var mParams: WindowManager.LayoutParams? = null
     private val mWindowManager: WindowManager
     private val statusText: TextView
+    private val pointContainer: View
+    private val pointImage: ImageView
+    private val mainHandler = Handler(Looper.getMainLooper())
+
     var status: String = ""
         set(value) {
-            statusText.text = value
+            mainHandler.post {
+                statusText.text = value
+            }
             field = value
         }
 
     fun open() {
-        try {
-            // check if the view is already
-            // inflated or present in the window
-            if (mView.windowToken == null) {
-                if (mView.parent == null) {
-                    mWindowManager.addView(mView, mParams)
+        mainHandler.post {
+            try {
+                // check if the view is already
+                // inflated or present in the window
+                if (mView.windowToken == null) {
+                    if (mView.parent == null) {
+                        mWindowManager.addView(mView, mParams)
+                    }
+                }
+            } catch (e: Exception) {
+                Log.d("Error1", e.toString())
+            }
+        }
+    }
+
+    fun showPuzzleAction(pos: Pair<Int, Int>, action: Action) {
+        GlobalScope.launch {
+            withContext(Dispatchers.Main) {
+                val y = pos.second - 330 - 200
+                val x = pos.first + 10
+                val margins = pointImage.layoutParams as RelativeLayout.LayoutParams
+                margins.leftMargin = x
+                margins.topMargin = y
+                pointImage.layoutParams = margins
+                val imageResId = when (action) {
+                    Action.moveRigh -> R.drawable.action_right
+                    Action.moveDown -> R.drawable.action_down
+                    Action.tap -> R.drawable.action_tap
+                    Action.notFound -> 0
+                }
+                pointImage.setImageResource(imageResId)
+
+                for (i in 0..3) {
+                    pointContainer.visibility = View.VISIBLE
+                    delay(200)
+                    pointContainer.visibility = View.GONE
+                    delay(200)
                 }
             }
-        } catch (e: Exception) {
-            Log.d("Error1", e.toString())
         }
     }
 
     private fun close() {
-        try {
-            // remove the view from the window
-            mWindowManager.removeView(mView)
-            // invalidate the view
-            mView.invalidate()
-            // remove all views
-            (mView.parent as? ViewGroup)?.removeAllViews()
+        mainHandler.post {
+            try {
+                // remove the view from the window
+                mWindowManager.removeView(mView)
+                // invalidate the view
+                mView.invalidate()
+                // remove all views
+                (mView.parent as? ViewGroup)?.removeAllViews()
 
-            // the above steps are necessary when you are adding and removing
-            // the view simultaneously, it might give some exceptions
-            service.stopWork()
-        } catch (e: Exception) {
-            Log.d("Error2", e.toString())
+                // the above steps are necessary when you are adding and removing
+                // the view simultaneously, it might give some exceptions
+                service.stopWork()
+            } catch (e: Exception) {
+                Log.d("Error2", e.toString())
+            }
         }
     }
 
@@ -60,7 +103,7 @@ class Controls(private val service: ToolsService) {
             WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.WRAP_CONTENT,  // Display it on top of other application windows
             0,
-            200,
+            280,
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,  // Don't let it grab the input focus
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,  // Make the underlying application window visible
             // through any transparent parts
@@ -80,6 +123,8 @@ class Controls(private val service: ToolsService) {
         button.setOnClickListener { startWork() }
 
         statusText = mView.findViewById(R.id.text_status)
+        pointContainer = mView.findViewById(R.id.container_point)
+        pointImage = mView.findViewById(R.id.image_point)
 
         // Define the position of the
         // window within the screen

@@ -7,6 +7,7 @@ import kotlin.math.max
 private val bombFigure = PuzzleOptimizer.Figure(0)
 
 enum class Action { moveRigh, moveDown, tap, notFound }
+typealias PartPos = Pair<Int, Int>
 
 class PuzzleOptimizer(private val origin: Puzzle) {
     private val variants = mutableListOf<Variant>()
@@ -65,7 +66,6 @@ class PuzzleOptimizer(private val origin: Puzzle) {
         return workPuzzle
     }
 
-    data class PartPos(val x: Int, val y: Int)
     data class Figure(var count: Int, var horIncluded: Boolean = false, var swapFound: Boolean= false)
 
     class Variant(val puzzle: Puzzle, val fromX: Int, val fromY: Int, val toX: Int, val toY: Int, val similarCount: Int) {

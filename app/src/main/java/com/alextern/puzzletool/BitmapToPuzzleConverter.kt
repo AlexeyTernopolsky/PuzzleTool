@@ -58,6 +58,13 @@ class BitmapToPuzzleConverter(
         return puzzle
     }
 
+    fun cellCoordinate(x: Int, y: Int) : Pair<Int, Int> {
+        return Pair(
+            kXStart + x * kCellWidth,
+            kYStart + y * kCellHeight
+        )
+    }
+
     private fun findTemplate(x: Int, y: Int): Template? {
         var distance = 10
         while (distance <= 50) {

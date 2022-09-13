@@ -18,11 +18,12 @@ class ToolsActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val test = getDrawable(android.R.mipmap.sym_def_app_icon)
 
         // start projection
         val startButton = findViewById<Button>(R.id.startButton)
         startButton.setOnClickListener { startProjection() }
+
+        findViewById<Button>(R.id.testButton).setOnClickListener { startControlsTest() }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
@@ -53,6 +54,11 @@ class ToolsActivity : Activity() {
                 getSystemService(MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
             startActivityForResult(mProjectionManager.createScreenCaptureIntent(), REQUEST_CODE)
         }
+    }
+
+    private fun startControlsTest() {
+        startService(ToolsService.getTestControlIntent(this))
+        moveTaskToBack(true)
     }
 
     // method to ask user to grant the Overlay permission
