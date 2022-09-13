@@ -67,14 +67,14 @@ class ToolsService : Service() {
     }
 
     private fun analyzeBitmap(bitmap: Bitmap) {
-        val converter = BitmapToPuzzleConverter(bitmap, ConverterType.kPuzzleDuel)
+        val converter = BitmapToPuzzleConverter(bitmap, controls?.mode ?: ConverterType.kNormal)
         val puzzle = converter.analyze()
         if (puzzle.isValid()) {
             controls?.status = "Анализировано"
             val optimizer = PuzzleOptimizer(puzzle)
             optimizer.optimize()
             val pos = converter.cellCoordinate(optimizer.actionX, optimizer.actionY)
-            controls?.status = "Оптимально:\n${optimizer.actionX} x ${optimizer.actionY}"
+            controls?.status = "Оптимально(${optimizer.maxPoints}):\n${optimizer.actionX} x ${optimizer.actionY}"
             controls?.showPuzzleAction(pos, optimizer.actionType)
         } else {
             print(puzzle.toString())

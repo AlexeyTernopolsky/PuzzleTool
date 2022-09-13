@@ -15,6 +15,7 @@ class PuzzleOptimizer(private val origin: Puzzle) {
     var actionX = 0
     var actionY = 0
     var actionType = Action.notFound
+    var maxPoints: Int = 0
 
     fun optimize() {
         val numRows = origin.numRows
@@ -44,6 +45,7 @@ class PuzzleOptimizer(private val origin: Puzzle) {
         if (variant != null) {
             actionX = variant.fromX
             actionY = variant.fromY
+            maxPoints = variant.damage
             actionType = when {
                 variant.isTap -> Action.tap
                 variant.fromX != variant.toX -> Action.moveRigh
@@ -188,13 +190,14 @@ class PuzzleOptimizer(private val origin: Puzzle) {
 
         private fun activateBomb(x: Int, y: Int) {
             fun handlePuz(x: Int, y: Int) {
-                if (field[x][y] == null)
+                if (field[x][y] == null) {
                     field[x][y] = bombFigure
 
-                if (puzzle[x, y].type == PuzzleType.bomb) {
-                    activateBomb(x, y)
-                } else if (puzzle[x, y].type == PuzzleType.grenade) {
-                    activateGrenade(x, y)
+                    if (puzzle[x, y].type == PuzzleType.bomb) {
+                        activateBomb(x, y)
+                    } else if (puzzle[x, y].type == PuzzleType.grenade) {
+                        activateGrenade(x, y)
+                    }
                 }
             }
 
