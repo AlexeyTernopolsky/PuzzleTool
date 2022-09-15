@@ -38,7 +38,7 @@ object NotificationUtils {
 
     private fun createNotification(context: Context): Notification {
         val builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-        builder.setSmallIcon(R.drawable.ic_camera)
+        builder.setSmallIcon(R.drawable.ic_search)
         builder.setContentTitle(context.getString(R.string.app_name))
         builder.setContentText("Работает")
         builder.setOngoing(true)

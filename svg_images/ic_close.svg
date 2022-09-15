@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="24"
+   height="24"
+   viewBox="0 0 6.3499999 6.3500002"
+   version="1.1"
+   id="svg5"
+   sodipodi:docname="ic_close.svg"
+   inkscape:version="1.1.1 (c3084ef, 2021-09-22)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview830"
+     pagecolor="#7dff70"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="20"
+     inkscape:cx="10"
+     inkscape:cy="9.525"
+     inkscape:window-width="1874"
+     inkscape:window-height="1027"
+     inkscape:window-x="46"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg5" />
+  <defs
+     id="defs2" />
+  <rect
+     style="fill:#000000;fill-opacity:0.868932;stroke:none;stroke-width:5.92217;stroke-opacity:0.501961"
+     id="rect990"
+     width="6.3499999"
+     height="6.3499999"
+     x="4.7683717e-08"
+     y="4.7683717e-08"
+     ry="0.90969098" />
+  <g
+     class=""
+     id="g1135"
+     transform="matrix(0.01148111,0,0,0.01148111,0.23583586,0.20657052)">
+    <path
+       d="M 217,28.098 V 483.902 L 359,441.305 V 70.697 Z M 376.938,54.978 377,57.305 V 87 h 16 V 55 Z M 119,55 v 117.27 h 18 V 73 h 62 V 55 Z m 258,50 v 16 h 16 v -16 z m 0,34 v 236 h 16 V 139 Z M 137,197.727 V 233 H 41 v 46 h 96 v 35.273 L 195.273,256 Z M 244,232 c 6.627,0 12,10.745 12,24 0,13.255 -5.373,24 -12,24 -6.627,0 -12,-10.745 -12,-24 0,-13.255 5.373,-24 12,-24 z M 137,339.73 H 119 V 448 h 18 z M 377,393 v 14 h 16 v -14 z m 0,32 v 23 h 16 V 425 Z M 32,471 v 18 h 167 v -18 z m 290.652,0 -60,18 H 480 v -18 z"
+       fill="#ffffff"
+       fill-opacity="1"
+       id="path1133" />
+  </g>
+</svg>

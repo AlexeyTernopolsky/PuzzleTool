@@ -70,15 +70,20 @@ class ToolsService : Service() {
         val converter = BitmapToPuzzleConverter(bitmap, controls?.mode ?: ConverterType.kPuzzleDuel)
         val puzzle = converter.analyze()
         if (puzzle.isValid()) {
-            controls?.status = "Анализировано"
             val optimizer = PuzzleOptimizer(puzzle)
             optimizer.optimize()
             val pos = converter.cellCoordinate(optimizer.actionX, optimizer.actionY)
-            controls?.status = "Оптимально(${optimizer.maxPoints}):\n${optimizer.actionX} x ${optimizer.actionY}"
+            controls?.status = "${optimizer.maxPoints}"
             controls?.showPuzzleAction(pos, optimizer.actionType)
+        } else if (tryCount < 5) {
+            tryCount += 1
+            mHandler?.postDelayed({
+                freeVirtualDisplay()
+                createVirtualDisplay()
+            }, 200)
         } else {
             print(puzzle.toString())
-            controls?.status = "Новое сохранение"
+            controls?.status = "New"
             saveImageInQ(bitmap)
         }
     }
@@ -187,8 +192,12 @@ class ToolsService : Service() {
         return START_NOT_STICKY
     }
 
+    var tryCount = 0
+
     fun catchAndStart() {
         // create virtual display depending on device width / height
+        tryCount = 0
+        controls?.status = "..."
         freeVirtualDisplay()
         createVirtualDisplay()
     }

@@ -38,8 +38,7 @@ class PuzzleOptimizer(private val origin: Puzzle) {
         }
 
         variants.forEach {
-            if (it.similarCount < 4)
-                it.calculateDamage()
+            it.calculateDamage()
         }
 
         val variant = variants.maxByOrNull { it.damage }

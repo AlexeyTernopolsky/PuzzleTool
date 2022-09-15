@@ -30,9 +30,7 @@ class ToolsActivity : Activity() {
         if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 startService(ToolsService.getStartIntent(this, resultCode, data))
-
-                findViewById<View>(R.id.startButton).visibility = View.GONE
-                moveTaskToBack(true)
+                finish()
                 /*val background = findViewById<ImageView>(R.id.image_background)
                 background.visibility = View.VISIBLE
                 background.setImageResource(R.drawable.test1)*/

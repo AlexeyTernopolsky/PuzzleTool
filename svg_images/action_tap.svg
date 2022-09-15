@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="145"
+   height="145"
+   viewBox="0 0 38.364582 38.364584"
+   version="1.1"
+   id="svg1252"
+   inkscape:version="1.1.1 (c3084ef, 2021-09-22)"
+   sodipodi:docname="action_tap.svg"
+   inkscape:export-filename="/Volumes/Extend/Data/PuzzleTool/app/src/main/res/drawable-xxhdpi/action_tap.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1254"
+     pagecolor="#7b8c78"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     units="px"
+     inkscape:zoom="1"
+     inkscape:cx="73"
+     inkscape:cy="77.5"
+     inkscape:window-width="1874"
+     inkscape:window-height="1027"
+     inkscape:window-x="46"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1249" />
+  <g
+     inkscape:label="Слой 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#fdffff;fill-opacity:0.86893201;stroke-width:5.67541;stroke-opacity:0.501961"
+       id="rect1335"
+       width="38.364582"
+       height="38.364582"
+       x="6.357829e-07"
+       y="6.357829e-07"
+       ry="10.079268" />
+    <g
+       class=""
+       id="g2713"
+       transform="matrix(0.07409701,0,0,0.07409701,0.21345711,0.21345711)"
+       style="fill:#000000;fill-opacity:1">
+      <path
+         d="M 256,23.9 A 232.1,232.1 0 0 0 23.9,256 232.1,232.1 0 0 0 256,488.1 232.1,232.1 0 0 0 488.1,256 232.1,232.1 0 0 0 256,23.9 Z M 256,39.77 301.3,153 H 210.7 L 247.6,60.66 Z M 256,183 c 40.2,0 73,32.8 73,73 0,40.2 -32.8,73 -73,73 -40.2,0 -73,-32.8 -73,-73 0,-40.2 32.8,-73 73,-73 z m 0,18 c -30.5,0 -55,24.5 -55,55 0,30.5 24.5,55 55,55 30.5,0 55,-24.5 55,-55 0,-30.5 -24.5,-55 -55,-55 z m -103,9.7 v 90.6 L 39.77,256 140.7,215.6 Z m 206,0 L 472.2,256 359,301.3 Z M 256,231 c 13.7,0 25,11.3 25,25 0,13.7 -11.3,25 -25,25 -13.7,0 -25,-11.3 -25,-25 0,-13.7 11.3,-25 25,-25 z m -45.3,128 h 90.6 L 256,472.2 215.6,371.3 Z"
+         fill="#ffffff"
+         fill-opacity="1"
+         id="path2711"
+         style="fill:#000000;fill-opacity:1" />
+    </g>
+  </g>
+</svg>
