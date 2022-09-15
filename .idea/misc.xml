@@ -5,7 +5,7 @@
       <map>
         <entry key="app/src/main/res/drawable/ic_camera.xml" value="0.2525" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/overlay.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/overlay.xml" value="0.5" />
       </map>
     </option>
   </component>

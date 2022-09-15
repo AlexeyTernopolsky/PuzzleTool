@@ -67,7 +67,7 @@ class ToolsService : Service() {
     }
 
     private fun analyzeBitmap(bitmap: Bitmap) {
-        val converter = BitmapToPuzzleConverter(bitmap, controls?.mode ?: ConverterType.kNormal)
+        val converter = BitmapToPuzzleConverter(bitmap, controls?.mode ?: ConverterType.kPuzzleDuel)
         val puzzle = converter.analyze()
         if (puzzle.isValid()) {
             controls?.status = "Анализировано"
@@ -177,7 +177,7 @@ class ToolsService : Service() {
                 // show interface
                 showInterface()
                 mHandler?.postDelayed({
-                    controls?.showPuzzleAction(Pair(20, 400), Action.moveRigh)
+                    controls?.showPuzzleAction(Pair(20, 400), Action.moveRight)
                 }, 1000)
             }
             else -> {

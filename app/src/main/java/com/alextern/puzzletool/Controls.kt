@@ -1,7 +1,6 @@
 package com.alextern.puzzletool
 
 import android.graphics.PixelFormat
-import android.opengl.Visibility
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -30,7 +29,7 @@ class Controls(private val service: ToolsService) {
             }
             field = value
         }
-    var mode = ConverterType.kNormal
+    var mode = ConverterType.kPuzzleDuel
 
     fun open() {
         mainHandler.post {
@@ -58,7 +57,7 @@ class Controls(private val service: ToolsService) {
                 margins.topMargin = y
                 pointImage.layoutParams = margins
                 val imageResId = when (action) {
-                    Action.moveRigh -> R.drawable.action_right
+                    Action.moveRight -> R.drawable.action_right
                     Action.moveDown -> R.drawable.action_down
                     Action.tap -> R.drawable.action_tap
                     Action.notFound -> 0

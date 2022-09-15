@@ -6,7 +6,8 @@ import kotlin.math.max
 
 private val bombFigure = PuzzleOptimizer.Figure(0)
 
-enum class Action { moveRigh, moveDown, tap, notFound }
+@Suppress("EnumEntryName")
+enum class Action { moveRight, moveDown, tap, notFound }
 typealias PartPos = Pair<Int, Int>
 
 class PuzzleOptimizer(private val origin: Puzzle) {
@@ -48,7 +49,7 @@ class PuzzleOptimizer(private val origin: Puzzle) {
             maxPoints = variant.damage
             actionType = when {
                 variant.isTap -> Action.tap
-                variant.fromX != variant.toX -> Action.moveRigh
+                variant.fromX != variant.toX -> Action.moveRight
                 variant.fromY != variant.toY -> Action.moveDown
                 else -> Action.notFound
             }
@@ -70,7 +71,7 @@ class PuzzleOptimizer(private val origin: Puzzle) {
 
     data class Figure(var count: Int, var horIncluded: Boolean = false, var swapFound: Boolean= false)
 
-    class Variant(val puzzle: Puzzle, val fromX: Int, val fromY: Int, val toX: Int, val toY: Int, val similarCount: Int) {
+    class Variant(private val puzzle: Puzzle, val fromX: Int, val fromY: Int, val toX: Int, val toY: Int, val similarCount: Int) {
         private var changed = mutableSetOf(PartPos(fromX, fromY), PartPos(toX, toY))
         private var field: Array<Array<Figure?>> = Array(puzzle.numColumns) {  Array(puzzle.numRows) { null } }
         private var figures = mutableListOf<Figure>()
@@ -210,7 +211,7 @@ class PuzzleOptimizer(private val origin: Puzzle) {
                 handlePuz(x, y - 1)
             if (x < puzzle.numRows - 1)
                 handlePuz(x + 1, y)
-            if (y < puzzle.numColumns)
+            if (y < puzzle.numColumns - 1)
                 handlePuz(x, y + 1)
         }
 
