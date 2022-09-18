@@ -6,7 +6,7 @@ import kotlin.math.abs
 
 @Suppress("EnumEntryName")
 enum class ConverterType {
-    kNormal, kPuzzleDuel
+    kNormal, kPuzzleDuel, kMasterPuzzle
 }
 
 class BitmapToPuzzleConverter(
@@ -31,6 +31,15 @@ class BitmapToPuzzleConverter(
                 kCellHeight = 145
                 kCellWidth = 145
                 templates = createNormalTemplateList()
+            }
+            ConverterType.kMasterPuzzle-> {
+                kXStart = 32
+                kYStart = 1412
+                kNumRows = 5
+                kNumColumns = 7
+                kCellHeight = 145
+                kCellWidth = 145
+                templates = createDuelTemplateList()
             }
             ConverterType.kPuzzleDuel -> {
                 kXStart = 32
@@ -121,6 +130,26 @@ data class Template(
 )
 
 private fun createDuelTemplateList(): List<Template> = listOf(
+    Template(  // grenade blue
+        points = listOf(
+            TemplatePoint(x = .517f, y = .172f, red = 144, green = 161, blue = 179),
+            TemplatePoint(x = .628f, y = .248f, red = 64, green = 81, blue = 106),
+            TemplatePoint(x = .345f, y = .49f, red = 38, green = 157, blue = 220),
+            TemplatePoint(x = .365f, y = .752f, red = 33, green = 96, blue = 172),
+        ),
+        color = PuzzleColor.blue,
+        type = PuzzleType.grenade
+    ),
+    Template(  // grenade violet
+        points = listOf(
+            TemplatePoint(x = .6f, y = .172f, red = 186, green = 186, blue = 204),
+            TemplatePoint(x = .7f, y = .248f, red = 92, green = 91, blue = 127),
+            TemplatePoint(x = .393f, y = .483f, red = 95, green = 53, blue = 154),
+            TemplatePoint(x = .248f, y = .876f, red = 84, green = 46, blue = 144)
+        ),
+        color = PuzzleColor.violet,
+        type = PuzzleType.grenade
+    ),
     Template(  // bomb violet
         points = listOf(
             TemplatePoint(x = .593f, y = .248f, hue = 200f),
@@ -183,10 +212,10 @@ private fun createDuelTemplateList(): List<Template> = listOf(
     ),
     Template(   // normal red
         points = listOf(
-            TemplatePoint(x = .489f, y = .206f, hue = 18f),
-            TemplatePoint(x = .496f, y = .71f, hue = 352f),
-            TemplatePoint(x = .641f, y = .337f, hue = 11f),
-            TemplatePoint(x = .358f, y = .669f, hue = 355f),
+            TemplatePoint(x = .2f, y = .365f, red = 168, green = 56, blue = 42),
+            TemplatePoint(x = .786f, y = .352f, red = 199, green = 79, blue = 62),
+            TemplatePoint(x = .207f, y = .634f, red = 90, green = 20, blue = 30),
+            TemplatePoint(x = .752f, y = .655f, red = 125, green = 18, blue = 46),
         ),
         color = PuzzleColor.red,
         type = PuzzleType.normal

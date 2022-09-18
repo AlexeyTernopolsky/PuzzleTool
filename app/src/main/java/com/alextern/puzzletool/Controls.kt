@@ -144,6 +144,10 @@ class Controls(private val service: ToolsService) {
                 modeText.text = "D"
             }
             ConverterType.kPuzzleDuel -> {
+                mode = ConverterType.kMasterPuzzle
+                modeText.text = "M"
+            }
+            ConverterType.kMasterPuzzle -> {
                 mode = ConverterType.kNormal
                 modeText.text = "N"
             }

@@ -63,10 +63,20 @@ class AnalyzerTest {
                 "Vn Bn Yn Bn Bn Vn Bn \n")
     }
 
-    private fun parseBitmap(fileName: String): String {
+    @Test
+    fun masterPuzzle() {
+        val str = parseBitmap("test6.png", ConverterType.kMasterPuzzle)
+        assertEquals(str, "Vn Rb Vn Bn Rn Vn Vn \n" +
+                "Vn Gn Gn Vn Bn Yn Rn \n" +
+                "Rn Yn Vn Vn Bn Yn Vn \n" +
+                "Rn Rn Bg Gn Vn Vn Bn \n" +
+                "Gn Rn Rn Gn Rn Gn Rn \n")
+    }
+
+    private fun parseBitmap(fileName: String, type: ConverterType = ConverterType.kPuzzleDuel): String {
         val bitmap = getBitmapFromTestAssets(fileName)
         if (bitmap != null) {
-            val converter = BitmapToPuzzleConverter(bitmap, ConverterType.kPuzzleDuel)
+            val converter = BitmapToPuzzleConverter(bitmap, type)
             val puzzle = converter.analyze()
            return puzzle.toString()
         } else {
