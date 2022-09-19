@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Тулзина</string>
+    <string name="app_name">Анализ пазлов</string>
     <string name="action.start">Запуск</string>
     <string name="action.testAnalyze">Тестовый анализ</string>
 </resources>

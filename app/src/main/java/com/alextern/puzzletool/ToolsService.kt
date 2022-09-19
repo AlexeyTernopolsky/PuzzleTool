@@ -67,24 +67,28 @@ class ToolsService : Service() {
     }
 
     private fun analyzeBitmap(bitmap: Bitmap) {
-        val converter = BitmapToPuzzleConverter(bitmap, controls?.mode ?: ConverterType.kPuzzleDuel)
-        val puzzle = converter.analyze()
-        if (puzzle.isValid()) {
-            val optimizer = PuzzleOptimizer(puzzle)
-            optimizer.optimize()
-            val pos = converter.cellCoordinate(optimizer.actionX, optimizer.actionY)
-            controls?.status = "${optimizer.maxPoints}"
-            controls?.showPuzzleAction(pos, optimizer.actionType)
-        } else if (tryCount < 5) {
-            tryCount += 1
-            mHandler?.postDelayed({
-                freeVirtualDisplay()
-                createVirtualDisplay()
-            }, 200)
-        } else {
-            print(puzzle.toString())
-            controls?.status = "New"
+        if (catchOnly) {
+            controls?.status = "Captured"
             saveImageInQ(bitmap)
+        } else {
+            val converter = BitmapToPuzzleConverter(bitmap, controls?.mode ?: ConverterType.kPuzzleDuel)
+            val puzzle = converter.analyze()
+            if (puzzle.isValid()) {
+                val optimizer = PuzzleOptimizer(puzzle)
+                optimizer.optimize()
+                val pos = converter.cellCoordinate(optimizer.actionX, optimizer.actionY)
+                controls?.status = "${optimizer.maxPoints}"
+                controls?.showPuzzleAction(pos, optimizer.actionType)
+            } else if (tryCount < 5) {
+                tryCount += 1
+                mHandler?.postDelayed({
+                    freeVirtualDisplay()
+                    createVirtualDisplay()
+                }, 200)
+            } else {
+                print(puzzle.toString())
+                controls?.status = "Failed"
+            }
         }
     }
 
@@ -185,6 +189,7 @@ class ToolsService : Service() {
                     controls?.showPuzzleAction(Pair(20, 400), Action.moveRight)
                 }, 1000)
             }
+            intent.action == kExitAction -> controls?.close()
             else -> {
                 stopSelf()
             }
@@ -193,10 +198,12 @@ class ToolsService : Service() {
     }
 
     var tryCount = 0
+    var catchOnly = false
 
-    fun catchAndStart() {
+    fun catchAndAnalyze(catchOnly: Boolean = false) {
         // create virtual display depending on device width / height
         tryCount = 0
+        this.catchOnly = catchOnly
         controls?.status = "..."
         freeVirtualDisplay()
         createVirtualDisplay()
@@ -259,6 +266,7 @@ class ToolsService : Service() {
     }
 
     companion object {
+        const val kExitAction = "Action.Exit"
         private const val TAG = "ScreenCaptureService"
         private const val RESULT_CODE = "RESULT_CODE"
         private const val DATA = "DATA"

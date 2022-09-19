@@ -25,12 +25,12 @@ class BitmapToPuzzleConverter(
         when (type) {
             ConverterType.kNormal-> {
                 kXStart = 32
-                kYStart = 1064
+                kYStart = 1124
                 kNumRows = 5
                 kNumColumns = 7
                 kCellHeight = 145
                 kCellWidth = 145
-                templates = createNormalTemplateList()
+                templates = createDuelTemplateList()
             }
             ConverterType.kMasterPuzzle-> {
                 kXStart = 32
@@ -150,6 +150,16 @@ private fun createDuelTemplateList(): List<Template> = listOf(
         color = PuzzleColor.violet,
         type = PuzzleType.grenade
     ),
+    Template(  // grenade yellow
+        points = listOf(
+            TemplatePoint(x = .628f, y = .159f, red = 124, green = 130, blue = 148),
+            TemplatePoint(x = .683f, y = .310f, red = 229, green = 205, blue = 103),
+            TemplatePoint(x = .428f, y = .641f, red = 109, green = 116, blue = 132),
+            TemplatePoint(x = .221f, y = .855f, red = 66, green = 49, blue = 12),
+        ),
+        color = PuzzleColor.yellow,
+        type = PuzzleType.grenade
+    ),
     Template(  // bomb violet
         points = listOf(
             TemplatePoint(x = .593f, y = .248f, hue = 200f),
@@ -251,54 +261,3 @@ private fun createDuelTemplateList(): List<Template> = listOf(
     )
 )
 
-private fun createNormalTemplateList(): List<Template> = listOf(
-    Template(       // normal violet
-        points = listOf(
-            TemplatePoint(x = .49f, y = .186f, red = 197, green = 160, blue = 204),
-            TemplatePoint(x = .49f, y = .814f, red = 81, green = 49, blue = 150),
-            TemplatePoint(x = .1655f, y = .503f, red = 85, green = 31, blue = 143),
-            TemplatePoint(x = .814f, y = .496f, red = 95, green = 29, blue = 155)
-        ),
-        color = PuzzleColor.violet,
-        type = PuzzleType.normal
-    ),
-    Template(   // normal red
-        points = listOf(
-            TemplatePoint(x = .2f, y = .365f, red = 168, green = 56, blue = 42),
-            TemplatePoint(x = .786f, y = .352f, red = 199, green = 79, blue = 62),
-            TemplatePoint(x = .207f, y = .634f, red = 90, green = 20, blue = 30),
-            TemplatePoint(x = .752f, y = .655f, red = 125, green = 18, blue = 46),
-        ),
-        color = PuzzleColor.red,
-        type = PuzzleType.normal
-    ),
-    Template(   // normal yellow
-        points = listOf(
-            TemplatePoint(x = .214f, y = .29f, red = 189, green = 138, blue = 29),
-            TemplatePoint(x = .772f, y = .296f, red = 187, green = 146, blue = 28),
-            TemplatePoint(x = .228f, y = .676f, red = 124, green = 62, blue = 11),
-            TemplatePoint(x = .772f, y = .669f, red = 131, green = 53, blue = 30),
-        ),
-        color = PuzzleColor.yellow,
-        type = PuzzleType.normal
-    ),
-    Template(   // normal green
-        points = listOf(
-            TemplatePoint(x = .193f, y = .276f, red = 66, green = 146, blue = 47),
-            TemplatePoint(x = .731f, y = .276f, red = 77, green = 154, blue = 58),
-            TemplatePoint(x = .510f, y = .786f, red = 29, green = 124, blue = 58),
-        ),
-        color = PuzzleColor.green,
-        type = PuzzleType.normal
-    ),
-    Template(   // normal blue
-        points = listOf(
-            TemplatePoint(x = .166f, y = .531f, red = 38, green = 77, blue = 136),
-            TemplatePoint(x = .503f, y = .207f, red = 82, green = 222, blue = 221),
-            TemplatePoint(x = .821f, y = .483f, red = 22, green = 77, blue = 133),
-            TemplatePoint(x = .455f, y = .807f, red = 22, green = 81, blue = 159),
-        ),
-        color = PuzzleColor.blue,
-        type = PuzzleType.normal
-    )
-)

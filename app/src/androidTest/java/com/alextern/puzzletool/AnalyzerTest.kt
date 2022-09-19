@@ -16,6 +16,16 @@ import java.io.InputStream
 class AnalyzerTest {
 
     @Test
+    fun normal1() {
+        val str = parseBitmap("test8.png", ConverterType.kNormal)
+        assertEquals(str, "Vn Yn Gn Vn Yn Rn Gn \n" +
+                "Gn Rn Rn Yn Gn Bn Gn \n" +
+                "Gn Vn Bn Yn Gn Yn Yn \n" +
+                "Bn Yn Yn Rn Bn Rn Vn \n" +
+                "Bn Yn Gn Yn Rn Vn Bn \n")
+    }
+
+    @Test
     fun bombs1() {
         val str = parseBitmap("test1.png")
         assertEquals(str, "Vn Rn Vb Vn Bn Bn Rn \n" +
@@ -71,6 +81,16 @@ class AnalyzerTest {
                 "Rn Yn Vn Vn Bn Yn Vn \n" +
                 "Rn Rn Bg Gn Vn Vn Bn \n" +
                 "Gn Rn Rn Gn Rn Gn Rn \n")
+    }
+
+    @Test
+    fun masterPuzzle2() {
+        val str = parseBitmap("test7.png", ConverterType.kMasterPuzzle)
+        assertEquals(str, "Vn Vn Gn Rn Rn Vn Vn \n" +
+                "Gn Gn Yn Rn Rn Yn Rn \n" +
+                "Rn Yn Bn Yn Bn Gn Vn \n" +
+                "Gn Vn Gn Yn Bn Yn Rn \n" +
+                "Yg Bn Bn Vn Gn Vn Vn \n")
     }
 
     private fun parseBitmap(fileName: String, type: ConverterType = ConverterType.kPuzzleDuel): String {

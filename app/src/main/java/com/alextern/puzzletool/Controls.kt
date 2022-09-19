@@ -74,7 +74,7 @@ class Controls(private val service: ToolsService) {
         }
     }
 
-    private fun close() {
+    fun close() {
         mainHandler.post {
             try {
                 // remove the view from the window
@@ -94,7 +94,11 @@ class Controls(private val service: ToolsService) {
     }
 
     private fun startWork() {
-        service.catchAndStart()
+        service.catchAndAnalyze()
+    }
+
+    private fun captureScreen() {
+        service.catchAndAnalyze(true)
     }
 
     init {
@@ -117,11 +121,12 @@ class Controls(private val service: ToolsService) {
         mView = layoutInflater.inflate(R.layout.overlay, null)
         // set onClickListener on the remove button, which removes
         // the view from the window
-        var button: View = mView.findViewById(R.id.button_close)
-        button.setOnClickListener { close() }
 
-        button = mView.findViewById(R.id.button_start)
+        var button: View = mView.findViewById(R.id.button_start)
         button.setOnClickListener { startWork() }
+
+        button = mView.findViewById(R.id.button_capture)
+        button.setOnClickListener { captureScreen() }
 
         modeText = mView.findViewById(R.id.button_mode)
         modeText.setOnClickListener { changeMode() }

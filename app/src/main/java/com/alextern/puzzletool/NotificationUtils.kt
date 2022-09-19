@@ -5,7 +5,9 @@ import android.annotation.TargetApi
 import android.app.Notification
 import android.os.Build
 import android.app.NotificationChannel
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.util.Pair
 
@@ -37,14 +39,17 @@ object NotificationUtils {
     }
 
     private fun createNotification(context: Context): Notification {
+        val exitIntent = Intent(context, ToolsService::class.java)
+        exitIntent.action = ToolsService.kExitAction
+        val exitPendingIntent = PendingIntent.getService(context, 0, exitIntent, 0);
         val builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-        builder.setSmallIcon(R.drawable.ic_search)
+        builder.setSmallIcon(R.drawable.ic_search_black)
         builder.setContentTitle(context.getString(R.string.app_name))
-        builder.setContentText("Работает")
         builder.setOngoing(true)
         builder.setCategory(Notification.CATEGORY_SERVICE)
-        builder.priority = Notification.PRIORITY_LOW
         builder.setShowWhen(true)
+        builder.addAction(R.drawable.ic_close, "Выход", exitPendingIntent)
+
         return builder.build()
     }
 }
