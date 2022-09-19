@@ -189,7 +189,25 @@ class ToolsService : Service() {
                     controls?.showPuzzleAction(Pair(20, 400), Action.moveRight)
                 }, 1000)
             }
-            intent.action == kExitAction -> controls?.close()
+            intent.action == kExitAction -> {
+                val ctl = controls
+                if (ctl != null) {
+                    ctl.close()
+                } else {
+                    stopWork()
+                }
+            }
+            intent.action == kShowAction -> {
+                if (controls == null) {
+                    showInterface()
+                }
+            }
+            intent.action == kHideAction -> {
+                if (controls != null) {
+                    controls?.close(true)
+                    controls = null
+                }
+            }
             else -> {
                 stopSelf()
             }
@@ -267,6 +285,8 @@ class ToolsService : Service() {
 
     companion object {
         const val kExitAction = "Action.Exit"
+        const val kShowAction = "Action.Show"
+        const val kHideAction = "Action.Hide"
         private const val TAG = "ScreenCaptureService"
         private const val RESULT_CODE = "RESULT_CODE"
         private const val DATA = "DATA"

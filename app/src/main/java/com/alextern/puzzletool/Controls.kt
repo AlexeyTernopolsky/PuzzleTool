@@ -74,7 +74,7 @@ class Controls(private val service: ToolsService) {
         }
     }
 
-    fun close() {
+    fun close(hideOnly: Boolean = false) {
         mainHandler.post {
             try {
                 // remove the view from the window
@@ -86,7 +86,8 @@ class Controls(private val service: ToolsService) {
 
                 // the above steps are necessary when you are adding and removing
                 // the view simultaneously, it might give some exceptions
-                service.stopWork()
+                if (!hideOnly)
+                    service.stopWork()
             } catch (e: Exception) {
                 Log.d("Error2", e.toString())
             }
