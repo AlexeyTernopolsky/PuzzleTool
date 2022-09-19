@@ -208,9 +208,9 @@ class PuzzleOptimizer(private val origin: Puzzle) {
                 handlePuz(x - 1, y)
             if (y > 0)
                 handlePuz(x, y - 1)
-            if (x < puzzle.numRows - 1)
+            if (x < puzzle.numColumns - 1)
                 handlePuz(x + 1, y)
-            if (y < puzzle.numColumns - 1)
+            if (y < puzzle.numRows - 1)
                 handlePuz(x, y + 1)
         }
 
