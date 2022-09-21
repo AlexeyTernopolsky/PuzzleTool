@@ -10,39 +10,42 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 
+const val kStartWorkMode = 0
+const val kAskDrawPermissionMode = 1
+const val kAskCapturePermissionMode = 2
+
+const val kModeKey = "mode"
 
 class ToolsActivity : Activity() {
-    var checkDrawPermissions: Boolean = false
+    private var mode = kStartWorkMode
 
     /****************************************** Activity Lifecycle methods  */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        if (savedInstanceState != null) {
+            mode = savedInstanceState.getInt(kModeKey, kStartWorkMode)
+        }
+    }
 
-        // start projection
-        val startButton = findViewById<Button>(R.id.startButton)
-        startButton.setOnClickListener { startProjection() }
-
-        findViewById<Button>(R.id.testButton).setOnClickListener { startControlsTest() }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(kModeKey, mode)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 startService(ToolsService.getStartIntent(this, resultCode, data))
+                mode = kStartWorkMode
                 finish()
-                /*val background = findViewById<ImageView>(R.id.image_background)
-                background.visibility = View.VISIBLE
-                background.setImageResource(R.drawable.test1)*/
             }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        if (checkDrawPermissions) {
-            checkDrawPermissions = false
-            startProjection()
+        when (mode) {
+            kStartWorkMode, kAskDrawPermissionMode -> startProjection()
         }
     }
 
@@ -50,22 +53,27 @@ class ToolsActivity : Activity() {
         if (checkOverlayPermission()) {
             val mProjectionManager =
                 getSystemService(MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+            mode = kAskCapturePermissionMode
             startActivityForResult(mProjectionManager.createScreenCaptureIntent(), REQUEST_CODE)
         }
-    }
-
-    private fun startControlsTest() {
-        startService(ToolsService.getTestControlIntent(this))
-        moveTaskToBack(true)
     }
 
     // method to ask user to grant the Overlay permission
     private fun checkOverlayPermission():Boolean {
         if (!Settings.canDrawOverlays(this)) {
-            // send user to the device settings
-            val myIntent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
-            startActivity(myIntent)
-            checkDrawPermissions = true
+            when (mode) {
+                kStartWorkMode -> {
+                    // send user to the device settings
+                    val myIntent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+                    startActivity(myIntent)
+                    mode = kAskDrawPermissionMode
+                }
+                kAskDrawPermissionMode -> {
+                    // the user cancel to provide the permissions, simple exit from app
+                    mode = kStartWorkMode
+                    finish()
+                }
+            }
             return false
         }
         return true

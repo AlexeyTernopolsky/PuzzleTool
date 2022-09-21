@@ -179,16 +179,6 @@ class ToolsService : Service() {
                 showInterface()
                 startProjection(projCode, projData)
             }
-            isTestControlsCommand(intent) -> {
-                // create notification
-                val notification = getNotification(this)
-                startForeground(notification.first, notification.second)
-                // show interface
-                showInterface()
-                mHandler?.postDelayed({
-                    controls?.showPuzzleAction(Pair(20, 400), Action.moveRight)
-                }, 1000)
-            }
             intent.action == kExitAction -> {
                 val ctl = controls
                 if (ctl != null) {
@@ -302,18 +292,10 @@ class ToolsService : Service() {
             return intent
         }
 
-        fun getTestControlIntent(context: Context?): Intent {
-            val intent = Intent(context, ToolsService::class.java)
-            intent.putExtra(ACTION, TEST_CONTROLS)
-            return intent
-        }
-
         private fun isStartCommand(intent: Intent): Boolean {
             return (intent.hasExtra(RESULT_CODE) && intent.hasExtra(DATA)
                     && intent.hasExtra(ACTION) && intent.getStringExtra(ACTION) == START)
         }
-
-        private fun isTestControlsCommand(intent: Intent) = intent.getStringExtra(ACTION) == TEST_CONTROLS
 
         private val virtualDisplayFlags: Int
             get() = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY or DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC
