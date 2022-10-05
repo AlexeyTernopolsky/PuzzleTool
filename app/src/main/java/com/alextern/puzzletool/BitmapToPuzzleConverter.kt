@@ -130,6 +130,7 @@ data class Template(
 )
 
 private fun createDuelTemplateList(): List<Template> = listOf(
+    // grenade red and green ???
     Template(  // grenade blue
         points = listOf(
             TemplatePoint(x = .517f, y = .172f, red = 144, green = 161, blue = 179),
