@@ -2,6 +2,8 @@
 
 package com.alextern.puzzletool
 
+import android.graphics.Bitmap
+
 enum class PuzzleColor {
     invalid, violet, red, yellow, green, blue
 }
@@ -13,6 +15,8 @@ enum class PuzzleType {
 data class PuzzleElement(val color: PuzzleColor, val type: PuzzleType)
 
 class Puzzle(val numColumns: Int, val numRows: Int, copyArray: Array<PuzzleElement>? = null) {
+    var unknownTiles = arrayListOf<Bitmap>()
+
     constructor(numColumns: Int, numRows: Int, stringPuzzle: String) : this(numColumns, numRows) {
         var pos = 0
         (0 until numRows).forEach { y ->
@@ -97,6 +101,9 @@ class Puzzle(val numColumns: Int, val numRows: Int, copyArray: Array<PuzzleEleme
     }
 
     fun isValid():Boolean {
+        if (unknownTiles.isNotEmpty())
+            return false
+
         for (element in elements) {
             if (element.type == PuzzleType.invalid)
                 return false

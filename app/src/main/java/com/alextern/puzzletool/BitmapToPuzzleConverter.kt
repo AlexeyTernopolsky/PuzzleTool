@@ -1,7 +1,12 @@
 package com.alextern.puzzletool
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
+import org.tensorflow.lite.support.image.ImageProcessor
+import org.tensorflow.lite.support.image.TensorImage
+import org.tensorflow.lite.task.core.BaseOptions
+import org.tensorflow.lite.task.vision.classifier.ImageClassifier
 import kotlin.math.abs
 
 @Suppress("EnumEntryName")
@@ -9,8 +14,12 @@ enum class ConverterType {
     kNormal, kPuzzleDuel, kMasterPuzzle
 }
 
+private var imageClassifier: ImageClassifier? = null
+private var imageProcessor = ImageProcessor.Builder().build()
+
 class BitmapToPuzzleConverter(
     private val bitmap: Bitmap,
+    context: Context,
     type: ConverterType = ConverterType.kNormal
 ) {
     private val kXStart: Int
@@ -51,20 +60,57 @@ class BitmapToPuzzleConverter(
                 templates = createDuelTemplateList()
             }
         }
-    }
+
+        if (imageClassifier == null) {
+            val optionsBuilder = ImageClassifier.ImageClassifierOptions.builder()
+                .setScoreThreshold(0.5f)
+                .setMaxResults(1)
+
+            val baseOptionsBuilder = BaseOptions.builder().setNumThreads(1)
+            optionsBuilder.setBaseOptions(baseOptionsBuilder.build())
+
+            val modelName = "puzzles.tflite"
+
+            imageClassifier =
+                ImageClassifier.createFromFileAndOptions(context, modelName, optionsBuilder.build())
+        }
+     }
 
     fun analyze(): Puzzle {
-        val puzzle = Puzzle(numColumns = kNumColumns, numRows = kNumRows)
-        (0 until kNumColumns).forEach { x ->
-            (0 until kNumRows).forEach { y ->
-                val template = findTemplate(x, y)
-                if (template != null) {
-                    puzzle.updateElement(x, y, template.color, template.type)
+        val buffer = StringBuilder()
+        val unknownTiles = arrayListOf<Bitmap>()
+        (0 until kNumRows).forEach { y ->
+            (0 until kNumColumns).forEach { x ->
+                val bmp = Bitmap.createBitmap(bitmap, kXStart + x * kCellWidth, kYStart + y * kCellHeight, kCellWidth, kCellHeight)
+
+                // Preprocess the image and convert it into a TensorImage for classification.
+                val tensorImage = imageProcessor.process(TensorImage.fromBitmap(bmp))
+                val imageCp = imageClassifier
+                if (imageCp != null) {
+                    val results = imageCp.classify(tensorImage)
+                    if (results.isEmpty() || results.first().categories.isEmpty()) {
+                        unknownTiles.add(bmp)
+                    } else {
+                        val classification = results.first().categories.first().label
+                        buffer.append(classification)
+                        buffer.append(' ')
+                    }
                 }
             }
+            buffer.append('\n')
         }
 
-        return puzzle
+        return if (unknownTiles.isEmpty()) {
+            Puzzle(
+                numColumns = kNumColumns,
+                numRows = kNumRows,
+                stringPuzzle = buffer.toString()
+            )
+        } else {
+            val puzzle = Puzzle(kNumColumns, kNumRows)
+            puzzle.unknownTiles = unknownTiles
+            puzzle
+        }
     }
 
     fun cellCoordinate(x: Int, y: Int) : Pair<Int, Int> {
@@ -95,7 +141,6 @@ class BitmapToPuzzleConverter(
 
             distance += 10
         }
-
         return null
     }
 

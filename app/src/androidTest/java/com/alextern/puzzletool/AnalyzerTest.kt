@@ -96,8 +96,10 @@ class AnalyzerTest {
     private fun parseBitmap(fileName: String, type: ConverterType = ConverterType.kPuzzleDuel): String {
         val bitmap = getBitmapFromTestAssets(fileName)
         if (bitmap != null) {
-            val converter = BitmapToPuzzleConverter(bitmap, type)
+            val targetContext = getInstrumentation().targetContext
+            val converter = BitmapToPuzzleConverter(bitmap, targetContext, type)
             val puzzle = converter.analyze()
+            assert(puzzle.unknownTiles.isEmpty())
            return puzzle.toString()
         } else {
             fail("Fail to encode bitmap")
