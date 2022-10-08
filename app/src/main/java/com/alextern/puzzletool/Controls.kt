@@ -147,15 +147,19 @@ class Controls(private val service: ToolsService) {
         when (mode) {
             ConverterType.kNormal -> {
                 mode = ConverterType.kPuzzleDuel
-                modeText.text = "D"
+                modeText.text = "Duel"
             }
             ConverterType.kPuzzleDuel -> {
                 mode = ConverterType.kMasterPuzzle
-                modeText.text = "M"
+                modeText.text = "Master"
             }
             ConverterType.kMasterPuzzle -> {
+                mode = ConverterType.kMoonPuzzle
+                modeText.text = "Moon"
+            }
+            ConverterType.kMoonPuzzle -> {
                 mode = ConverterType.kNormal
-                modeText.text = "N"
+                modeText.text = "Normal"
             }
         }
     }
