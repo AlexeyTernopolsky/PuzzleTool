@@ -70,17 +70,20 @@ class ToolsService : Service() {
         if (catchOnly) {
             controls?.status = "Captured"
             saveImageInQ(bitmap)
+            controls?.captureEnabled = true
         } else {
             val converter = BitmapToPuzzleConverter(bitmap, this,controls?.mode ?: ConverterType.kPuzzleDuel)
             val puzzle = converter.analyze()
-            if (puzzle.isValid()) {
+            val colors = controls?.colors
+            if (puzzle.isValid() && colors != null) {
                 controls?.status = "Optimizing..."
                 mHandler?.post {
                     val optimizer = PuzzleOptimizer(puzzle)
-                    optimizer.optimize()
+                    optimizer.optimize(colors)
                     val pos = converter.cellCoordinate(optimizer.actionX, optimizer.actionY)
                     controls?.status = "${optimizer.maxPoints}"
                     controls?.showPuzzleAction(pos, optimizer.actionType)
+                    controls?.captureEnabled = true
                 }
             } /*else if (tryCount < 5) {
                 tryCount += 1
@@ -93,6 +96,7 @@ class ToolsService : Service() {
                 for (bmp in puzzle.unknownTiles) {
                     saveImageInQ(bmp)
                 }
+                controls?.captureEnabled = true
             }
         }
     }
@@ -218,6 +222,7 @@ class ToolsService : Service() {
         tryCount = 0
         this.catchOnly = catchOnly
         controls?.status = "Analyze..."
+        controls?.captureEnabled = false
         freeVirtualDisplay()
         createVirtualDisplay()
     }

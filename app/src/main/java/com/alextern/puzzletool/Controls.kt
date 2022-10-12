@@ -1,10 +1,12 @@
 package com.alextern.puzzletool
 
+import android.graphics.Color
 import android.graphics.PixelFormat
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.*
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -30,6 +32,9 @@ class Controls(private val service: ToolsService) {
             field = value
         }
     var mode = ConverterType.kPuzzleDuel
+    var colorsSelection = false
+    var colors = mutableSetOf(PuzzleColor.red, PuzzleColor.green, PuzzleColor.blue, PuzzleColor.yellow, PuzzleColor.violet)
+    var captureEnabled = true
 
     fun open() {
         mainHandler.post {
@@ -95,11 +100,13 @@ class Controls(private val service: ToolsService) {
     }
 
     private fun startWork() {
-        service.catchAndAnalyze()
+        if (captureEnabled)
+            service.catchAndAnalyze()
     }
 
     private fun captureScreen() {
-        service.catchAndAnalyze(true)
+        if (captureEnabled)
+            service.catchAndAnalyze(true)
     }
 
     init {
@@ -129,9 +136,20 @@ class Controls(private val service: ToolsService) {
         button = mView.findViewById(R.id.button_capture)
         button.setOnClickListener { captureScreen() }
 
+        button = mView.findViewById(R.id.button_colors)
+        button.setOnClickListener { openCloseColorsView() }
+
         modeText = mView.findViewById(R.id.button_mode)
         modeText.setOnClickListener { changeMode() }
 
+        val colorCheckboxIds = listOf(R.id.checkbox_color_red, R.id.checkbox_color_green, R.id.checkbox_color_blue, R.id.checkbox_color_yellow, R.id.checkbox_color_violet)
+        val colorTypes = listOf(PuzzleColor.red, PuzzleColor.green, PuzzleColor.blue, PuzzleColor.yellow, PuzzleColor.violet)
+        for (index in colorCheckboxIds.indices) {
+            val colorCheckbox: CheckBox = mView.findViewById(colorCheckboxIds[index])
+            colorCheckbox.setOnCheckedChangeListener { _, isChecked ->
+                updateColors(isChecked, colorTypes[index])
+            }
+        }
 
         statusText = mView.findViewById(R.id.text_status)
         pointContainer = mView.findViewById(R.id.container_point)
@@ -141,6 +159,19 @@ class Controls(private val service: ToolsService) {
         // window within the screen
         //mParams!!.gravity = Gravity.CENTER
         mWindowManager = service.getSystemService(WindowManager::class.java)
+    }
+
+    private fun updateColors(checked: Boolean, color: PuzzleColor) {
+        if (checked)
+            colors.add(color)
+        else
+            colors.remove(color)
+    }
+
+    private fun openCloseColorsView() {
+        colorsSelection = !colorsSelection
+        mView.findViewById<View>(R.id.container_colors).visibility = if (colorsSelection) View.VISIBLE else View.GONE
+        mView.findViewById<View>(R.id.button_colors).setBackgroundColor(if (colorsSelection) Color.BLACK else Color.TRANSPARENT)
     }
 
     private fun changeMode() {

@@ -4,74 +4,143 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="160px">
+        android:layout_height="160px"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="#10000000"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/text_status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="16dp"
+            android:textStyle="bold"
+            android:gravity="end"
+            android:textSize="26sp"
+            android:textColor="@android:color/white" />
+
+        <ImageView
+            android:id="@+id/button_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:src="@drawable/ic_search" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="#10000000"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/text_status"
+            <Space
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="16dp"
-                android:textStyle="bold"
-                android:gravity="end"
-                android:textSize="26sp"
-                android:textColor="@android:color/white" />
+                android:layout_weight="1"/>
 
             <ImageView
-                android:id="@+id/button_start"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="8dp"
+                android:id="@+id/button_colors"
+                android:src="@drawable/ic_pallete" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Duel"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:background="#a8000000"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:textStyle="bold"
+                android:id="@+id/button_mode"/>
+
+            <ImageView
+                android:id="@+id/button_capture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:src="@drawable/ic_search" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_vertical">
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Duel"
-                    android:textColor="@android:color/white"
-                    android:textSize="20sp"
-                    android:background="#a8000000"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:textStyle="bold"
-                    android:id="@+id/button_mode"/>
-
-                <ImageView
-                    android:id="@+id/button_capture"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_camera_capture" />
-
-
-            </LinearLayout>
+                android:src="@drawable/ic_camera_capture" />
 
 
         </LinearLayout>
-    </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/container_colors"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/black"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone">
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/white"
+            android:text="▲▲▲"
+            android:checked="true"
+            android:textColor="@color/red"
+            android:id="@+id/checkbox_color_red"/>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/white"
+            android:text="◆◆◆"
+            android:checked="true"
+            android:textColor="@color/green"
+            android:id="@+id/checkbox_color_green"/>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/white"
+            android:text="●●●"
+            android:checked="true"
+            android:textColor="@color/blue"
+            android:id="@+id/checkbox_color_blue"/>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/white"
+            android:text="▼▼▼"
+            android:checked="true"
+            android:textColor="@color/yellow"
+            android:id="@+id/checkbox_color_yellow"/>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/white"
+            android:text="◀◀◀"
+            android:checked="true"
+            android:textColor="@color/violet"
+            android:id="@+id/checkbox_color_violet"/>
+
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

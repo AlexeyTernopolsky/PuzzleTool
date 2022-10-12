@@ -18,7 +18,7 @@ class PuzzleOptimizer(private val origin: Puzzle) {
     var actionType = Action.notFound
     var maxPoints: Int = 0
 
-    fun optimize() {
+    fun optimize(colors: Set<PuzzleColor>) {
         val numRows = origin.numRows
         val numColumns = origin.numColumns
         var workPuzzle = origin.clone()
@@ -38,7 +38,7 @@ class PuzzleOptimizer(private val origin: Puzzle) {
         }
 
         variants.forEach {
-            it.calculateDamage()
+            it.calculateDamage(colors)
         }
 
         val variant = variants.maxByOrNull { it.damage }
@@ -83,7 +83,7 @@ class PuzzleOptimizer(private val origin: Puzzle) {
         val isTap: Boolean
             get() = fromX == toX && fromY == toY
 
-        fun calculateDamage() {
+        fun calculateDamage(colors: Set<PuzzleColor>) {
             // Check on tapping
             if (isTap) {
                 if (puzzle[fromX, fromY].type == PuzzleType.bomb) {
@@ -92,18 +92,18 @@ class PuzzleOptimizer(private val origin: Puzzle) {
                     activateGrenade(fromX, fromY)
                 }
 
-                removeFigures()
+                removeFigures(colors)
             }
 
             while(true) {
-                if (!oneTurn())
+                if (!oneTurn(colors))
                     break
                 else
                     multiplier += 0.1
             }
         }
 
-        private fun oneTurn():Boolean {
+        private fun oneTurn(colors: Set<PuzzleColor>):Boolean {
             // clear previous
             figures.clear()
             field.forEach {
@@ -113,7 +113,7 @@ class PuzzleOptimizer(private val origin: Puzzle) {
             horizontalProcessing()
             verticalProcessing()
             bombProcessing()
-            removeFigures()
+            removeFigures(colors)
             return figures.isNotEmpty()
         }
 
@@ -228,17 +228,21 @@ class PuzzleOptimizer(private val origin: Puzzle) {
             }
         }
 
-        private fun removeFigures() {
+        private fun removeFigures(colors: Set<PuzzleColor>) {
             if (figures.isNotEmpty())
                 multiplier += 0.1 * (figures.count() - 1)
             var erasedElements = 0
+            var erasedColors = 0
             val newChanged = mutableSetOf<PartPos>()
             (0 until puzzle.numColumns).forEach { x ->
                 var add = 0
                 (0 until puzzle.numRows).forEach { y ->
                     val figure = field[x][y]
                     if (figure != null) {
-                        erasedElements++
+                        if (colors.contains(puzzle[x,y].color))
+                            erasedColors++
+                        else
+                            erasedElements++
                         if (figure.count > 3 && !figure.swapFound) {
                             if (changed.contains(PartPos(x, y))) {
                                 val newType = if (figure.count == 4) PuzzleType.bomb else PuzzleType.grenade
@@ -265,7 +269,7 @@ class PuzzleOptimizer(private val origin: Puzzle) {
                 }
             }
 
-            _damage += (erasedElements.toFloat() * 100 * multiplier).toInt()
+            _damage += (erasedColors.toFloat() * 100 * multiplier).toInt() + erasedElements * 40
             changed = newChanged
         }
     }
