@@ -9,7 +9,7 @@ import org.tensorflow.lite.task.vision.classifier.ImageClassifier
 
 @Suppress("EnumEntryName")
 enum class ConverterType {
-    kNormal, kPuzzleDuel, kMasterPuzzle, kMoonPuzzle
+    kNormal, kMoonPuzzle, kPuzzleDuel, kMasterPuzzle,
 }
 
 private var imageClassifier: ImageClassifier? = null

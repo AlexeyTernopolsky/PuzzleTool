@@ -6,10 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.*
-import android.widget.CheckBox
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import kotlinx.coroutines.*
 
 
@@ -31,8 +28,21 @@ class Controls(private val service: ToolsService) {
             }
             field = value
         }
-    var mode = ConverterType.kPuzzleDuel
+
+    var modeIndex = 0
+        set(newValue) {
+            field = newValue
+            mainHandler.post {
+                modeText.text = "M${newValue}"
+                if (newValue in 1..4) {
+                    val modeRadioIds = listOf(R.id.radio_mode1, R.id.radio_mode2, R.id.radio_mode3, R.id.radio_mode4)
+                    val radioButton: RadioButton = mView.findViewById(modeRadioIds[newValue - 1])
+                    radioButton.isChecked = true
+                }
+            }
+        }
     var colorsSelection = false
+    var modeSelection = false
     var colors = mutableSetOf(PuzzleColor.red, PuzzleColor.green, PuzzleColor.blue, PuzzleColor.yellow, PuzzleColor.violet)
     var captureEnabled = true
 
@@ -139,8 +149,10 @@ class Controls(private val service: ToolsService) {
         button = mView.findViewById(R.id.button_colors)
         button.setOnClickListener { openCloseColorsView() }
 
+        button = mView.findViewById(R.id.container_button_mode)
+        button.setOnClickListener { openCloseModesView() }
+
         modeText = mView.findViewById(R.id.button_mode)
-        modeText.setOnClickListener { changeMode() }
 
         val colorCheckboxIds = listOf(R.id.checkbox_color_red, R.id.checkbox_color_green, R.id.checkbox_color_blue, R.id.checkbox_color_yellow, R.id.checkbox_color_violet)
         val colorTypes = listOf(PuzzleColor.red, PuzzleColor.green, PuzzleColor.blue, PuzzleColor.yellow, PuzzleColor.violet)
@@ -148,6 +160,16 @@ class Controls(private val service: ToolsService) {
             val colorCheckbox: CheckBox = mView.findViewById(colorCheckboxIds[index])
             colorCheckbox.setOnCheckedChangeListener { _, isChecked ->
                 updateColors(isChecked, colorTypes[index])
+            }
+        }
+
+        val modeRadioIds = listOf(R.id.radio_mode1, R.id.radio_mode2, R.id.radio_mode3, R.id.radio_mode4)
+        for (index in modeRadioIds.indices) {
+            val radio: RadioButton = mView.findViewById(modeRadioIds[index])
+            radio.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    modeIndex = index + 1
+                }
             }
         }
 
@@ -174,24 +196,9 @@ class Controls(private val service: ToolsService) {
         mView.findViewById<View>(R.id.button_colors).setBackgroundColor(if (colorsSelection) Color.BLACK else Color.TRANSPARENT)
     }
 
-    private fun changeMode() {
-        when (mode) {
-            ConverterType.kNormal -> {
-                mode = ConverterType.kPuzzleDuel
-                modeText.text = "Duel"
-            }
-            ConverterType.kPuzzleDuel -> {
-                mode = ConverterType.kMasterPuzzle
-                modeText.text = "Master"
-            }
-            ConverterType.kMasterPuzzle -> {
-                mode = ConverterType.kMoonPuzzle
-                modeText.text = "Moon"
-            }
-            ConverterType.kMoonPuzzle -> {
-                mode = ConverterType.kNormal
-                modeText.text = "Normal"
-            }
-        }
+    private fun openCloseModesView() {
+        modeSelection = !modeSelection
+        mView.findViewById<View>(R.id.container_modes).visibility = if (modeSelection) View.VISIBLE else View.GONE
+        mView.findViewById<View>(R.id.container_button_mode).setBackgroundColor(if (modeSelection) Color.BLACK else Color.TRANSPARENT)
     }
 }

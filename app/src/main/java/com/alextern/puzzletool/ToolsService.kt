@@ -72,19 +72,46 @@ class ToolsService : Service() {
             saveImageInQ(bitmap)
             controls?.captureEnabled = true
         } else {
-            val converter = BitmapToPuzzleConverter(bitmap, this,controls?.mode ?: ConverterType.kPuzzleDuel)
-            val puzzle = converter.analyze()
+            val modeIndex = controls?.modeIndex ?: 0
+            val puzzle: Puzzle
+            val converter: BitmapToPuzzleConverter
+            if (modeIndex == 0) {
+                var maxQuality = 1000
+                var maxQualityPuzzle: Puzzle? = null
+                var maxQualityMode = 0
+                var maxQualityConverter: BitmapToPuzzleConverter? = null
+                for (type in ConverterType.values()) {
+                    val testConverter = BitmapToPuzzleConverter(bitmap, this, type)
+                    val testPuzzle = testConverter.analyze()
+                    if (testPuzzle.isValid()) {
+                        maxQualityPuzzle = testPuzzle
+                        maxQualityMode = type.ordinal
+                        maxQualityConverter = testConverter
+                        break
+                    } else if (testPuzzle.unknownTiles.count() < maxQuality) {
+                        maxQuality = testPuzzle.unknownTiles.count()
+                        maxQualityPuzzle = testPuzzle
+                        maxQualityMode = type.ordinal
+                        maxQualityConverter = testConverter
+                    }
+                }
+                converter = maxQualityConverter!!
+                puzzle = maxQualityPuzzle!!
+                controls?.modeIndex = maxQualityMode + 1
+            } else {
+                converter = BitmapToPuzzleConverter(bitmap, this,ConverterType.values()[modeIndex - 1])
+                puzzle = converter.analyze()
+            }
+
             val colors = controls?.colors
             if (puzzle.isValid() && colors != null) {
                 controls?.status = "Optimizing..."
-                mHandler?.post {
-                    val optimizer = PuzzleOptimizer(puzzle)
-                    optimizer.optimize(colors)
-                    val pos = converter.cellCoordinate(optimizer.actionX, optimizer.actionY)
-                    controls?.status = "${optimizer.maxPoints}"
-                    controls?.showPuzzleAction(pos, optimizer.actionType)
-                    controls?.captureEnabled = true
-                }
+                val optimizer = PuzzleOptimizer(puzzle)
+                optimizer.optimize(colors)
+                val pos = converter.cellCoordinate(optimizer.actionX, optimizer.actionY)
+                controls?.status = "${optimizer.maxPoints}"
+                controls?.showPuzzleAction(pos, optimizer.actionType)
+                controls?.captureEnabled = true
             } /*else if (tryCount < 5) {
                 tryCount += 1
                 mHandler?.postDelayed({
