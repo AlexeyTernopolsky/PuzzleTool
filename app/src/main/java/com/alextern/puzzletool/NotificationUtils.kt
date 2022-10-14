@@ -49,10 +49,6 @@ object NotificationUtils {
         }
         val showPendingIntent = PendingIntent.getService(context, 0, showIntent, PendingIntent.FLAG_IMMUTABLE)
 
-        val hideIntent = Intent(context, ToolsService::class.java).apply {
-            action = ToolsService.kHideAction
-        }
-        val hidePendingIntent = PendingIntent.getService(context, 0, hideIntent, PendingIntent.FLAG_IMMUTABLE)
 
         val builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
         builder.setSmallIcon(R.drawable.ic_search_black)
@@ -62,7 +58,6 @@ object NotificationUtils {
         builder.setShowWhen(true)
         builder.addAction(R.drawable.ic_close, "Exit", exitPendingIntent)
         builder.addAction(R.drawable.ic_close, "Show", showPendingIntent)
-        builder.addAction(R.drawable.ic_close, "Hide", hidePendingIntent)
 
         return builder.build()
     }

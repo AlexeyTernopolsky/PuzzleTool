@@ -259,6 +259,10 @@ class ToolsService : Service() {
         stopSelf()
     }
 
+    fun clearControls() {
+        controls = null
+    }
+
     private fun freeVirtualDisplay() {
         if (mVirtualDisplay != null) mVirtualDisplay!!.release()
         if (mImageReader != null) mImageReader!!.setOnImageAvailableListener(null, null)

@@ -41,7 +41,7 @@ class Controls(private val service: ToolsService) {
                 }
             }
         }
-    var colorsSelection = false
+    var settingsSelection = false
     var modeSelection = false
     var colors = mutableSetOf(PuzzleColor.red, PuzzleColor.green, PuzzleColor.blue, PuzzleColor.yellow, PuzzleColor.violet)
     var captureEnabled = true
@@ -101,8 +101,11 @@ class Controls(private val service: ToolsService) {
 
                 // the above steps are necessary when you are adding and removing
                 // the view simultaneously, it might give some exceptions
-                if (!hideOnly)
+                if (hideOnly)
+                    service.clearControls()
+                else
                     service.stopWork()
+
             } catch (e: Exception) {
                 Log.d("Error2", e.toString())
             }
@@ -110,13 +113,24 @@ class Controls(private val service: ToolsService) {
     }
 
     private fun startWork() {
-        if (captureEnabled)
+        if (captureEnabled) {
+            closeExtraUI()
             service.catchAndAnalyze()
+        }
     }
 
     private fun captureScreen() {
-        if (captureEnabled)
+        if (captureEnabled) {
+            closeExtraUI()
             service.catchAndAnalyze(true)
+        }
+    }
+
+    private fun closeExtraUI() {
+        if (settingsSelection)
+            openCloseSettingsView()
+        if (modeSelection)
+            openCloseModesView()
     }
 
     init {
@@ -146,8 +160,14 @@ class Controls(private val service: ToolsService) {
         button = mView.findViewById(R.id.button_capture)
         button.setOnClickListener { captureScreen() }
 
-        button = mView.findViewById(R.id.button_colors)
-        button.setOnClickListener { openCloseColorsView() }
+        button = mView.findViewById(R.id.button_exit)
+        button.setOnClickListener {  close() }
+
+        button = mView.findViewById(R.id.button_hide)
+        button.setOnClickListener { close(hideOnly = true) }
+
+        button = mView.findViewById(R.id.button_settings)
+        button.setOnClickListener { openCloseSettingsView() }
 
         button = mView.findViewById(R.id.container_button_mode)
         button.setOnClickListener { openCloseModesView() }
@@ -190,10 +210,10 @@ class Controls(private val service: ToolsService) {
             colors.remove(color)
     }
 
-    private fun openCloseColorsView() {
-        colorsSelection = !colorsSelection
-        mView.findViewById<View>(R.id.container_colors).visibility = if (colorsSelection) View.VISIBLE else View.GONE
-        mView.findViewById<View>(R.id.button_colors).setBackgroundColor(if (colorsSelection) Color.BLACK else Color.TRANSPARENT)
+    private fun openCloseSettingsView() {
+        settingsSelection = !settingsSelection
+        mView.findViewById<View>(R.id.container_settings).visibility = if (settingsSelection) View.VISIBLE else View.GONE
+        mView.findViewById<View>(R.id.button_settings).setBackgroundColor(if (settingsSelection) Color.BLACK else Color.TRANSPARENT)
     }
 
     private fun openCloseModesView() {
