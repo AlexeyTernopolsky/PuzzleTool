@@ -106,7 +106,7 @@ class ToolsService : Service() {
             val colors = controls?.colors
             if (puzzle.isValid() && colors != null) {
                 controls?.status = "Optimizing..."
-                val optimizer = PuzzleOptimizer(puzzle)
+                val optimizer = PuzzleOptimizer(puzzle, twoSteps = modeIndex != 3)
                 optimizer.optimize(colors)
                 val pos = converter.cellCoordinate(optimizer.actionX, optimizer.actionY)
                 controls?.status = "${optimizer.maxPoints}"

@@ -10,7 +10,8 @@ private val bombFigure = PuzzleOptimizer.Figure(0)
 enum class Action { moveRight, moveDown, tap, notFound }
 typealias PartPos = Pair<Int, Int>
 
-class PuzzleOptimizer(private val origin: Puzzle) {
+class PuzzleOptimizer(private val origin: Puzzle,
+                      private val twoSteps: Boolean) {
     private val variants = mutableListOf<Variant>()
 
     var actionX = 0
@@ -39,6 +40,11 @@ class PuzzleOptimizer(private val origin: Puzzle) {
 
         variants.forEach {
             it.calculateDamage(colors)
+            if (twoSteps) {
+                val optimizer = PuzzleOptimizer(it.puzzle, false)
+                optimizer.optimize(colors)
+                it.appendDamage(optimizer.maxPoints)
+            }
         }
 
         val variant = variants.maxByOrNull { it.damage }
@@ -70,7 +76,7 @@ class PuzzleOptimizer(private val origin: Puzzle) {
 
     data class Figure(var count: Int, var horIncluded: Boolean = false, var swapFound: Boolean= false)
 
-    class Variant(private val puzzle: Puzzle, val fromX: Int, val fromY: Int, val toX: Int, val toY: Int, val similarCount: Int) {
+    class Variant(val puzzle: Puzzle, val fromX: Int, val fromY: Int, val toX: Int, val toY: Int, val similarCount: Int) {
         private var changed = mutableSetOf(PartPos(fromX, fromY), PartPos(toX, toY))
         private var field: Array<Array<Figure?>> = Array(puzzle.numColumns) {  Array(puzzle.numRows) { null } }
         private var figures = mutableListOf<Figure>()
@@ -79,6 +85,9 @@ class PuzzleOptimizer(private val origin: Puzzle) {
 
         val damage: Int
             get() = _damage
+        fun appendDamage(extra: Int) {
+           _damage += extra
+        }
 
         val isTap: Boolean
             get() = fromX == toX && fromY == toY
